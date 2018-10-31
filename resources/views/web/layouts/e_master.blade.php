@@ -10,6 +10,12 @@
     {{--href="https://fonts.googleapis.com/css?family=Raleway%3A100%2C200%2C300%2C400%2C500%2C600%2C700%2C800%2C900%2C100italic%2C200italic%2C300italic%2C400italic%2C500italic%2C600italic%2C700italic%2C800italic%2C900italic%7CPlayfair+Display%3A100%2C200%2C300%2C400%2C500%2C600%2C700%2C800%2C900%2C100italic%2C200italic%2C300italic%2C400italic%2C500italic%2C600italic%2C700italic%2C800italic%2C900italic%7CRaleway%3A100%2C200%2C300%2C400%2C500%2C600%2C700%2C800%2C900%2C100italic%2C200italic%2C300italic%2C400italic%2C500italic%2C600italic%2C700italic%2C800italic%2C900italic%7CPlayfair+Display%3A100%2C200%2C300%2C400%2C500%2C600%2C700%2C800%2C900%2C100italic%2C200italic%2C300italic%2C400italic%2C500italic%2C600italic%2C700italic%2C800italic%2C900italic%7CRaleway%3A100%2C200%2C300%2C400%2C500%2C600%2C700%2C800%2C900%2C100italic%2C200italic%2C300italic%2C400italic%2C500italic%2C600italic%2C700italic%2C800italic%2C900italic&amp;subset=latin%2Clatin-ext&amp;ver=1.0.0"--}}
     {{--type="text/css" media="all" data-viewport-units-buggyfill="ignore"/>--}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{---------------Notification---------------}}
+    <link rel="stylesheet" href="http://18.188.188.62/papersrc/assets/plugins/notifications/css/lobibox.min.css"/>
+    <script src="http://18.188.188.62/papersrc/assets/plugins/notifications/js/notifications.min.js"></script>
+    <script src="http://18.188.188.62/papersrc/assets/plugins/notifications/js/notification-custom-script.js"></script>
+    {{---------------Notification---------------}}
+
     <script type=text/javascript>
         $.ajaxSetup({
             headers: {

@@ -7,6 +7,7 @@ use App\Blogmodel;
 use App\ItemImages;
 use App\ItemMaster;
 use App\ItemPrice;
+use App\Measurement;
 use App\Notify;
 use App\OrderDescription;
 use App\OrderMaster;
@@ -222,7 +223,7 @@ class FrontendController extends Controller
         $category_id = request('category_id');
         $qry = '';
 
-        $all = "SELECT i.* FROM item_master i, item_category ic where ic.item_master_id = i.id";
+        $all = "SELECT DISTINCT i.* FROM item_master i, item_category ic where ic.item_master_id = i.id";
         $by_id = "SELECT i.* FROM item_master i, item_category ic where ic.item_master_id = i.id and ic.category_id = $category_id";
         $a = ($category_id == 0) ? $all : $by_id;
         $products_c = DB::select($a);
@@ -241,7 +242,7 @@ class FrontendController extends Controller
         }
 
         $offset = ($currentpage - 1) * $rowsperpage;
-        $all = "SELECT i.* FROM item_master i, item_category ic where ic.item_master_id = i.id ORDER BY i.id DESC LIMIT $offset,$rowsperpage";
+        $all = "SELECT DISTINCT i.* FROM item_master i, item_category ic where ic.item_master_id = i.id ORDER BY i.id DESC LIMIT $offset,$rowsperpage";
         $by_id = "SELECT i.* FROM item_master i, item_category ic where ic.item_master_id = i.id and ic.category_id = $category_id ORDER BY i.id DESC LIMIT $offset,$rowsperpage";
         $s = ($category_id == 0) ? $all : $by_id;
 //        $s = "SELECT i.* FROM item_master i, item_category ic where ic.item_master_id = i.id and ic.category_id = $category_id ORDER BY i.id DESC LIMIT $offset,$rowsperpage";
@@ -557,10 +558,12 @@ class FrontendController extends Controller
     {
         return view('web.terms_conditions');
     }
+
     public function measure()
     {
         return view('web.measure');
     }
+
     /**************************Appointment************************************/
     public function book_appointment()
     {
@@ -577,6 +580,42 @@ class FrontendController extends Controller
         $appointment->appointment_time = request('appointment_time');
         $appointment->address = request('address');
         $appointment->save();
+//        $customise_names = explode(",", request('customise_name'));
+//        $img_srcs = explode(",", request('img_src'));
+//        echo json_encode(request('customise_name'));
+//        echo json_encode(request('img_src'));
+        $cus_name = request('customise_name');
+        $img_src = request('img_src');
+        foreach (array_combine($cus_name, $img_src) as $name => $img_src) {
+            $measurement = new Measurement();
+            $measurement->appointment_id = $appointment->id;
+            $measurement->fabric_name = $name;
+            $measurement->image = $img_src;
+            $measurement->save();
+        }
+
+        $pant_name = request('pant_name');
+        $pant_src = request('pant_src');
+        foreach (array_combine($pant_name, $pant_src) as $name => $img_src) {
+            $measurement = new Measurement();
+            $measurement->appointment_id = $appointment->id;
+            $measurement->fabric_name = $name;
+            $measurement->image = $img_src;
+            $measurement->customise_type = 'pant';
+            $measurement->save();
+        }
+
+        $suit_name = request('suit_name');
+        $suit_src = request('suit_src');
+        foreach (array_combine($suit_name, $suit_src) as $name => $img_src) {
+            $measurement = new Measurement();
+            $measurement->appointment_id = $appointment->id;
+            $measurement->fabric_name = $name;
+            $measurement->image = $img_src;
+            $measurement->customise_type = 'suit';
+            $measurement->save();
+        }
+
         return 'success';
 //        return redirect('book_appointment')->with('message', 'Your appointment request has been saved we will get back to you soon');
     }

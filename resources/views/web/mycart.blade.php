@@ -87,8 +87,8 @@
                                                 <div class="option_availability">
                                                     <div class="option_txt">Price :</div>
                                                     <div class="product_right_txt">
-                                                        @if($item_price->price > 0)
-                                                            <span class="mdi mdi-currency-inr"></span>{{$item_price->price}}
+                                                        @if($item->price > 0)
+                                                            <span class="mdi mdi-currency-inr"></span>{{$item->price}}
                                                         @else
                                                             {{"-"}}
                                                         @endif
@@ -97,8 +97,8 @@
                                                 <div class="option_availability">
                                                     <div class="option_txt">Special Price :</div>
                                                     <div class="product_right_txt">
-                                                        @if($item_price->spl_price >0 )
-                                                            <span class="mdi mdi-currency-inr"></span> {{$item_price->spl_price}}
+                                                        @if($item->spl_price >0 )
+                                                            <span class="mdi mdi-currency-inr"></span> {{$item->spl_price}}
                                                         @else
                                                             {{"-"}}
                                                         @endif
@@ -163,7 +163,6 @@
             </div>
         </div>
     </section>
-    @include('web.layouts.footer')
     <script>
         function remove_cart_item(cart_item_id) {
             $.ajax({

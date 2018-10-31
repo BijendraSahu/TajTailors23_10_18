@@ -163,6 +163,8 @@
     }
 </style>
 @section('head')
+    <script src="{{url('js/login_validation.js')}}"></script>
+
     <section class="masurment_section">
         <div class="container-fluid">
             <div class="tabs_panel">
@@ -190,7 +192,7 @@
                     <div class="tab-content">
                         <div class="tab-pane fade shirt_block active in" id="shirt">
                             <div class="top_namebtn">
-                                <div class="first_name">Hello Pinku Kesharwani</div>
+                                <div class="first_name">Hello <span class="appoint_user">Pinku Kesharwani</span></div>
                                 <div class="pull-right">
                                     <a type="button" onclick="SwitchTable('PANTS')"
                                        class="btn btn-success btn-sm ">
@@ -350,7 +352,7 @@
                         </div>
                         <div class="tab-pane fade pants_block" id="pant">
                             <div class="top_namebtn">
-                                <div class="first_name">Hello Pinku Kesharwani</div>
+                                <div class="first_name">Hello <span class="appoint_user">Pinku Kesharwani</span></div>
                                 <div class="pull-right">
                                     <a type="button" class="btn btn-primary btn-sm center_btnmargin"
                                        onclick="SwitchTable('SHIRT')"><i
@@ -439,7 +441,7 @@
                         </div>
                         <div class="tab-pane fade suit_block" id="suit">
                             <div class="top_namebtn">
-                                <div class="first_name">Hello Pinku Kesharwani</div>
+                                <div class="first_name">Hello <span class="appoint_user">Pinku Kesharwani</span></div>
                                 <div class="pull-right">
                                     <a type="button" class="btn btn-primary btn-sm center_btnmargin"
                                        onclick="SwitchTable('PANTS')"><i
@@ -593,7 +595,7 @@
                         </div>
                         <div class="tab-pane fade review" id="review">
                             <div class="top_namebtn">
-                                <div class="first_name">Hello Pinku Kesharwani</div>
+                                <div class="first_name">Hello <span class="appoint_user">Pinku Kesharwani</span></div>
                                 <div class="pull-right">
                                     <a type="button" class="btn btn-primary btn-sm center_btnmargin"
                                        onclick="SwitchTable('SUIT')"><i
@@ -640,15 +642,17 @@
                                     <div class="update_profile_row row">
                                         <div class="col-sm-6">
                                             <div class="textbox_containner">
-                                                <input type="text" name="name" autocomplete="off" class="animate_txt"
+                                                <input type="text" name="name" autocomplete="off"
+                                                       class="animate_txt textWithSpace"
                                                        id="app_name" placeholder="Enter Name">
                                                 <label class="animate_placeholder" for="app_name">Name*</label>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="textbox_containner ">
-                                                <input type="text" name="contact" autocomplete="off" class="animate_txt"
-                                                       id="contact" placeholder="Enter Contact No">
+                                                <input type="text" name="contact" autocomplete="off"
+                                                       class="animate_txt numberOnly"
+                                                       id="contact" placeholder="Enter Contact No" maxlength="10">
                                                 <label class="animate_placeholder" for="contact">Contact No.*</label>
                                             </div>
                                         </div>
@@ -721,6 +725,7 @@
             </div>
         </div>
     </section>
+
     <div class="modal fade" id="Appointment_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
@@ -734,16 +739,18 @@
                     <div class="update_profile_row row">
                         <div class="col-sm-6">
                             <div class="textbox_containner">
-                                <input type="text" name="name" autocomplete="off" class="animate_txt" id="appoint_name"
+                                <input type="text" name="name" autocomplete="off" class="animate_txt textWithSpace"
+                                       id="appoint_name"
+                                       value="@if(isset($_SESSION['user_master']->name)) {{$_SESSION['user_master']->name}} @endif"
                                        placeholder="Enter Name">
                                 <label class="animate_placeholder" for="appoint_name">Name*</label>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="textbox_containner ">
-                                <input type="text" name="contact" autocomplete="off" class="animate_txt"
-                                       id="appoint_contact"
-                                       placeholder="Enter Contact No">
+                                <input type="text" name="contact" autocomplete="off" class="animate_txt numberOnly"
+                                       id="appoint_contact" maxlength="10"
+                                       placeholder="Enter Contact No" value="@if(isset($_SESSION['user_master']->contact)) {{$_SESSION['user_master']->contact}} @endif">
                                 <label class="animate_placeholder" for="appoint_contact">Contact No.*</label>
                             </div>
                         </div>
@@ -824,6 +831,11 @@
         }
         function app_submit() {
             var current_select = $('.first_appointment').find('.selected_style').find('.img_caption').text();
+            var appoint_name = $('#appoint_name').val();
+            var appoint_contact = $('#appoint_contact').val();
+            $('#app_name').val(appoint_name);
+            $('#contact').val(appoint_contact);
+            $('.appoint_user').text(appoint_name);
             SwitchTable(current_select);
         }
         function SwitchTable(switch_block) {
@@ -858,5 +870,112 @@
                     $('#shirt').addClass('active in');
             }
         }
+
+        function book_appointment() {
+            customise_names = new Array();
+            srcs = new Array();
+            $('#shirt_measure_review .img_box').each(function () {
+                var names = $(this).find('.img_caption').text();
+                var src = $(this).find('img').attr('src');
+                customise_names.push(names);
+                srcs.push(src);
+            });
+            var customise_name = customise_names;
+            var img_src = srcs;
+
+            pant_names = new Array();
+            pant_srcs = new Array();
+            $('#pants_measure_review .img_box').each(function () {
+                var pant_name = $(this).find('.img_caption').text();
+                var pant_src = $(this).find('img').attr('src');
+                pant_names.push(pant_name);
+                pant_srcs.push(pant_src);
+            });
+            var pant_nam = pant_names;
+            var pant_sr = pant_srcs;
+
+            suit_names = new Array();
+            suit_srcs = new Array();
+            $('#suit_measure_review .img_box').each(function () {
+                var suit_name = $(this).find('.img_caption').text();
+                var suit_src = $(this).find('img').attr('src');
+                suit_names.push(suit_name);
+                suit_srcs.push(suit_src);
+            });
+            var suit_nam = suit_names;
+            var suit_sr = suit_srcs;
+
+
+//            alert(customise_name);
+//            alert(src);
+//            console.log(src);
+            var name = $('#app_name').val();
+            var email = $('#email').val();
+            var contact = $('#contact').val();
+            var appointment_date = $('#appointment_date').val();
+            var appointment_time = $('#appointment_time option:selected').val();
+            var address = $('#address').val();
+            if (customise_name == '') {
+                swal("Required....", "You have'nt select any customize fabrics", "info");
+            } else if (name == '') {
+                swal("Required....", "Please enter your name", "info");
+            } else if (email == '') {
+                swal("Required....", "Please enter email", "info");
+            } else if (contact == '') {
+                swal("Required....", "Please enter contact", "info");
+            } else if (appointment_date == '') {
+                swal("Required....", "Please select appointment date", "info");
+            } else if (appointment_time == '') {
+                swal("Required....", "Please select appointment time", "info");
+            } else {
+                $.ajax({
+                    type: "get",
+                    contentType: "application/json; charset=utf-8",
+                    url: "{{ url('take_appointment') }}",
+//                    data: '{"name":"' + name + '","email":"' + email + '","contact":"' + contact + '","appointment_date":"' + appointment_date + '","appointment_time":"' + appointment_time + '","address":"' + address + '"}',
+                    data: {
+                        name: name,
+                        email: email,
+                        contact: contact,
+                        appointment_date: appointment_date,
+                        address: address,
+                        appointment_time: appointment_time,
+                        customise_name: customise_name,
+                        img_src: img_src,
+                        pant_name: pant_nam,
+                        pant_src: pant_sr,
+                        suit_name: suit_nam,
+                        suit_src: suit_sr
+                    },
+                    success: function (data) {
+                        if (data == 'success') {
+//                            $("#appointment").load(location.href + " #appointment");
+                            $('#app_name').val('');
+                            $('#email').val('');
+                            $('#contact').val('');
+                            $('#appointment_date').val('');
+                            $('#appointment_time option:selected').val('0');
+                            $('#address').val('');
+                            success_noti('Your appointment request has been saved we will get back to you soon');
+
+//                            swal("Success", "Your appointment request has been saved we will get back to you soon", "success");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+//                        swal("Server Error", "Something went wrong", "info");
+                        $('#err2').html(xhr.responseText);
+                    }
+                });
+            }
+        }
+        var date = new Date();
+        $('.dtp').datepicker({
+            format: "dd-MM-yyyy",
+            maxViewMode: 2,
+            todayHighlight: true,
+            daysOfWeekHighlighted: "0",
+            autoclose: true,
+            startDate: date
+        });
     </script>
 @stop
